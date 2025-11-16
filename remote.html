@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Control Panel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a2e;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: linear-gradient(145deg, #ff6b9d, #c44569);
+            border-radius: 30px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(255, 107, 157, 0.4);
+            max-width: 600px;
+            width: 100%;
+            border: 3px solid #ff85a2;
+        }
+
+        h1 {
+            text-align: center;
+            color: #fff;
+            margin-bottom: 35px;
+            font-size: 28px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .directional-pad {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr;
+            gap: 5px;
+            width: 250px;
+            height: 250px;
+            margin: 0 auto 30px;
+        }
+
+        .dir-btn {
+            background: rgba(255, 255, 255, 0.25);
+            border: 3px solid #fff;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 700;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 14px;
+            position: relative;
+        }
+
+        .dir-btn:hover {
+            background: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 5px 20px rgba(255, 255, 255, 0.4);
+        }
+
+        .dir-btn:active {
+            background: rgba(255, 255, 255, 0.6);
+            transform: scale(0.95);
+        }
+
+        #forward {
+            grid-column: 2;
+            grid-row: 1;
+            border-radius: 15px 15px 5px 5px;
+        }
+
+        #left {
+            grid-column: 1;
+            grid-row: 2;
+            border-radius: 15px 5px 5px 15px;
+        }
+
+        #stop {
+            grid-column: 2;
+            grid-row: 2;
+            background: rgba(255, 50, 100, 0.4);
+            border-color: #ff3264;
+            border-radius: 50%;
+            font-size: 16px;
+        }
+
+        #stop:hover {
+            background: rgba(255, 50, 100, 0.6);
+        }
+
+        #right {
+            grid-column: 3;
+            grid-row: 2;
+            border-radius: 5px 15px 15px 5px;
+        }
+
+        #backward {
+            grid-column: 2;
+            grid-row: 3;
+            border-radius: 5px 5px 15px 15px;
+        }
+
+        .control-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .ctrl-btn {
+            padding: 18px 25px;
+            font-size: 15px;
+            border: 3px solid #fff;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 700;
+            color: #fff;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .ctrl-btn:hover {
+            background: rgba(255, 255, 255, 0.35);
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
+        }
+
+        .ctrl-btn:active {
+            transform: scale(0.98);
+        }
+
+        .ctrl-btn.active {
+            background: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.6),
+                        inset 0 0 20px rgba(255, 255, 255, 0.4);
+        }
+
+        .status {
+            display: inline-block;
+            margin-left: 8px;
+            font-size: 12px;
+            padding: 2px 8px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Vehicle Control</h1>
+        
+        <div class="directional-pad">
+            <button id="forward" class="dir-btn">FWD</button>
+            <button id="left" class="dir-btn">LEFT</button>
+            <button id="stop" class="dir-btn">STOP</button>
+            <button id="right" class="dir-btn">RIGHT</button>
+            <button id="backward" class="dir-btn">REV</button>
+        </div>
+
+        <div class="control-buttons">
+            <button id="headlight" class="ctrl-btn toggle-btn">
+                Headlight
+                <span class="status">OFF</span>
+            </button>
+            
+            <button id="highBeam" class="ctrl-btn toggle-btn">
+                High Beam
+                <span class="status">OFF</span>
+            </button>
+            
+            <button id="backlight" class="ctrl-btn toggle-btn">
+                Back Light
+                <span class="status">OFF</span>
+            </button>
+            
+            <button id="horn" class="ctrl-btn">
+                Horn
+            </button>
+            
+            <button id="autoPilot" class="ctrl-btn toggle-btn full-width">
+                Auto Pilot
+                <span class="status">OFF</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const toggleButtons = document.querySelectorAll('.toggle-btn');
+        
+        toggleButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                btn.classList.toggle('active');
+                const status = btn.querySelector('.status');
+                const isOn = btn.classList.contains('active');
+                status.textContent = isOn ? 'ON' : 'OFF';
+            });
+        });
+
+        document.getElementById('horn').addEventListener('click', function() {
+            this.style.background = 'rgba(255, 255, 255, 0.6)';
+            setTimeout(() => {
+                this.style.background = 'rgba(255, 255, 255, 0.2)';
+            }, 300);
+        });
+
+        ['forward', 'backward', 'left', 'right', 'stop'].forEach(id => {
+            document.getElementById(id).addEventListener('click', function() {
+                console.log(`${id.toUpperCase()} activated`);
+            });
+        });
+    </script>
+</body>
+</html>
